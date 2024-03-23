@@ -1,6 +1,7 @@
 import { useEffect, useState } from "react";
 import "./Machine.css";
 import React from "react";
+import assets from "../public";
 
 function Machine() {
   const buttons = [
@@ -59,7 +60,7 @@ function Machine() {
               <audio
                 className="clip"
                 id={button.key}
-                src={`../public/${button.key.toLowerCase()}-sound.mp3`}
+                src={assets[`${button.key.toLowerCase()}Src`]}
               ></audio>
             </button>
           );
