@@ -59,7 +59,7 @@ function Machine() {
               <audio
                 className="clip"
                 id={button.key}
-                src={`/public/${button.key.toLowerCase()}-sound.mp3`}
+                src={`../public/${button.key.toLowerCase()}-sound.mp3`}
               ></audio>
             </button>
           );
