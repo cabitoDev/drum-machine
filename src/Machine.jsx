@@ -4,32 +4,26 @@ import React from "react";
 
 function Machine() {
   const buttons = [
-    { key: "q", sound: "Heater 1" },
-    { key: "w", sound: "Heater 2" },
-    { key: "e", sound: "Heater 3" },
-    { key: "a", sound: "Heater 4" },
-    { key: "s", sound: "Clap" },
-    { key: "d", sound: "Open-HH" },
-    { key: "z", sound: "Kick-n'-Hat" },
-    { key: "x", sound: "Kick" },
-    { key: "c", sound: "Closed-HH" },
+    { key: "Q", sound: "Heater 1" },
+    { key: "W", sound: "Heater 2" },
+    { key: "E", sound: "Heater 3" },
+    { key: "A", sound: "Heater 4" },
+    { key: "S", sound: "Clap" },
+    { key: "D", sound: "Open-HH" },
+    { key: "Z", sound: "Kick-n'-Hat" },
+    { key: "X", sound: "Kick" },
+    { key: "C", sound: "Closed-HH" },
   ];
-  const [audios, setAudios] = useState({});
-  const [sound, setSound] = useState("");
+
+  const [buttonPressed, setButtonPressed] = useState("");
 
   useEffect(() => {
-    for (const button of buttons) {
-      setAudios((prev) => ({
-        ...prev,
-        [button.key]: new Audio(`../public/${button.key}-sound.mp3`),
-      }));
-    }
-  }, []);
-  useEffect(() => {
     const handleKeyDown = (event) => {
-      const keyPressed = event.key.toLowerCase();
-      const button = buttons.find((button) => button.key === keyPressed);
-      if (button !== undefined && audios[keyPressed]) {
+      const keyPressed = event.key;
+      const button = buttons.find(
+        (button) => button.key === keyPressed.toUpperCase()
+      );
+      if (button !== undefined) {
         playAudio(button);
       }
     };
@@ -39,23 +33,39 @@ function Machine() {
     return () => {
       document.removeEventListener("keydown", handleKeyDown);
     };
-  }, [audios]);
+  }, []);
 
   const playAudio = (button) => {
-    audios[button.key].play();
-    setSound(button.key);
+    setButtonPressed(button);
+    document.getElementById(button.key).play();
   };
 
   return (
     <div id="drum-machine">
-      {buttons.map((button, index) => {
-        return (
-          <button key={`button_${index}`} onClick={() => playAudio(button)}>
-            {button.key}
-          </button>
-        );
-      })}
-      <div id="display">{sound}</div>
+      <div className="buttons">
+        {buttons.map((button, index) => {
+          return (
+            <button
+              className={
+                button.key === buttonPressed.key
+                  ? "drum-pad drum-pad-selected"
+                  : "drum-pad drum-pad-not-selected"
+              }
+              id={button.sound}
+              key={`button_${index}`}
+              onClick={() => playAudio(button)}
+            >
+              {button.key}
+              <audio
+                className="clip"
+                id={button.key}
+                src={`/public/${button.key.toLowerCase()}-sound.mp3`}
+              ></audio>
+            </button>
+          );
+        })}
+      </div>
+      <div id="display">{buttonPressed.sound}</div>
     </div>
   );
 }
